@@ -19,9 +19,15 @@ class ActionLayer(BaseActionLayer):
         --------
         layers.ActionNode
         """
-        effects_a = actionA.effects
-        effects_b = actionB.effects
-        return any([eff_a == ~eff_b for eff_a in effects_a for eff_b in effects_b])
+        effects_a = self.children[actionA]
+        effects_b = self.children[actionB]
+
+        for eff_a in effects_a:
+            for eff_b in effects_b:
+                if eff_a == ~eff_b:
+                    return True
+        else: 
+            return False
 
     def _interference(self, actionA, actionB):
         """ Return True if the effects of either action negate the preconditions of the other 
@@ -34,10 +40,10 @@ class ActionLayer(BaseActionLayer):
         --------
         layers.ActionNode
         """
-        prec_a = actionA.preconditions
-        prec_b = actionB.preconditions
-        effects_a = actionA.effects
-        effects_b = actionA.effects
+        prec_a = self.parents[actionA]
+        prec_b = self.parents[actionB]
+        effects_a = self.children[actionA]
+        effects_b = self.children[actionB]
 
         for eff_a in effects_a:
             for pre_b in prec_b:
@@ -48,7 +54,7 @@ class ActionLayer(BaseActionLayer):
             for pre_a in prec_a:
                 if eff_b == ~pre_a:
                     return True
-            
+
         return False
 
     def _competing_needs(self, actionA, actionB):
