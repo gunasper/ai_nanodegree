@@ -91,11 +91,11 @@ class LiteralLayer(BaseLiteralLayer):
         --------
         layers.BaseLayer.parent_layer
         """
-        #I guess maybe there is an error here... I'm not sure if I've understood everything in this point.
-        ways_a = [k for k, all_v in self.parent_layer.parents.items() for v in all_v if v == literalA]
-        ways_b = [k for k, all_v in self.parent_layer.parents.items() for v in all_v if v == literalB]
-        return all([self.is_mutex(wa, wb) for wa in ways_a for wb in ways_b])
-
+        ways_a = [wa for wa in self.parents[literalA]]
+        ways_b = [wb for wb in self.parents[literalB]]
+        
+        return all(self.parent_layer.is_mutex(wa, wb) for wa in ways_a for wb in ways_b)
+        
     def _negation(self, literalA, literalB):
         """ Return True if two literals are negations of each other """
         return literalA == ~literalB
