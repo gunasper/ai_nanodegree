@@ -24,10 +24,10 @@ class ActionLayer(BaseActionLayer):
 
         for eff_a in effects_a:
             for eff_b in effects_b:
-                if eff_a == ~eff_b:
+                if eff_a == ~eff_b and eff_a != eff_b:
                     return True
-        else: 
-            return False
+
+        return False
 
     def _interference(self, actionA, actionB):
         """ Return True if the effects of either action negate the preconditions of the other 
